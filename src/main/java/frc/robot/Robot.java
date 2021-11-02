@@ -9,6 +9,8 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -101,6 +103,8 @@ public class Robot extends TimedRobot {
      * rightMotor.getMotorOutputVoltage());
      * SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
      */
+    
+    SmartDashboard.putNumber("Battery V", RobotController.getBatteryVoltage());
     SmartDashboard.putNumber("Left Encoder Counts", m_robotContainer.driveSubsystem.getLeftEncoderPosition());
     SmartDashboard.putNumber("Right Encoder Counts", m_robotContainer.driveSubsystem.getRightEncoderPosition());
     SmartDashboard.putNumber("Left Dist Meters", m_robotContainer.driveSubsystem.leftDistanceTravelledInMeters());

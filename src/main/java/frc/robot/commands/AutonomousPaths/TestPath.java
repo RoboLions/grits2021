@@ -45,7 +45,7 @@ public class TestPath extends SequentialCommandGroup {
       //turn left
       new AutoTurn(driveSubsystem, -90), new StopNWait(driveSubsystem, 0.6),
       //shoot out balls
-      new AutoMove(driveSubsystem, 0.1), new StopNWait(driveSubsystem, 0.3),
+      new AutoMove(driveSubsystem, 0.4), new StopNWait(driveSubsystem, 0.3),
       
       new Outtake(intakeSubsystem).withTimeout(1.5));
       //edge closer
