@@ -50,8 +50,10 @@ public class Robot extends TimedRobot {
   private ArmSubsystem armSubsystem = m_robotContainer.armSubsystem;
 
   private XboxController driverController = m_robotContainer.driverController;
-  private WPI_TalonFX leftMotor = RobotMap.leftDriveMotor;
-  private WPI_TalonFX rightMotor = RobotMap.rightDriveMotor;
+  private WPI_TalonFX leftFrontMotor = RobotMap.leftFrontDriveMotor;
+  private WPI_TalonFX rightFrontMotor = RobotMap.rightFrontDriveMotor;
+  private WPI_TalonFX leftBackMotor = RobotMap.leftBackDriveMotor;
+  private WPI_TalonFX rightBackMotor = RobotMap.rightBackDriveMotor;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -72,6 +74,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Middle: Empty into Lower - 90 Degree Path", new TestPath(driveSubsystem, intakeSubsystem, armSubsystem));
 
     SmartDashboard.putData("Autonomous Chooser", m_chooser);
+
+    leftFrontMotor.configFactoryDefault();
+    rightFrontMotor.configFactoryDefault();
+    leftBackMotor.configFactoryDefault();
+    rightBackMotor.configFactoryDefault();
   }
 
   /**
@@ -105,15 +112,17 @@ public class Robot extends TimedRobot {
      */
     
     SmartDashboard.putNumber("Battery V", RobotController.getBatteryVoltage());
-    SmartDashboard.putNumber("Left Encoder Counts", m_robotContainer.driveSubsystem.getLeftEncoderPosition());
-    SmartDashboard.putNumber("Right Encoder Counts", m_robotContainer.driveSubsystem.getRightEncoderPosition());
+    SmartDashboard.putNumber("Left Encoder Counts", m_robotContainer.driveSubsystem.getLeftBackEncoderPosition());
+    SmartDashboard.putNumber("Right Encoder Counts", m_robotContainer.driveSubsystem.getRightBackEncoderPosition());
     SmartDashboard.putNumber("Left Dist Meters", m_robotContainer.driveSubsystem.leftDistanceTravelledInMeters());
     SmartDashboard.putNumber("Right Dist Meters", m_robotContainer.driveSubsystem.rightDistanceTravelledInMeters());
-    SmartDashboard.putNumber("Temp Left F500", RobotMap.leftDriveMotor.getTemperature());
-    SmartDashboard.putNumber("Temp Right F500", RobotMap.rightDriveMotor.getTemperature());
-    SmartDashboard.putNumber("Left Motor Voltage", RobotMap.leftDriveMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Right Motor Voltage", RobotMap.rightDriveMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Temp Left F500", RobotMap.leftBackDriveMotor.getTemperature());
+    SmartDashboard.putNumber("Temp Right F500", RobotMap.rightBackDriveMotor.getTemperature());
+    SmartDashboard.putNumber("Left Motor Voltage", RobotMap.leftBackDriveMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Right Motor Voltage", RobotMap.rightBackDriveMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("Climb Encoder Counts", m_robotContainer.climberSubsystem.getEncoderPosition());
+    SmartDashboard.putNumber("Left Motor MPS", m_robotContainer.driveSubsystem.getLeftBackEncoderVelocityMetersPerSecond());
+    SmartDashboard.putNumber("Right Motor MPS", m_robotContainer.driveSubsystem.getRightBackEncoderVelocityMetersPerSecond());
   }
 
   @Override

@@ -46,8 +46,10 @@ public class DriveSubsystem extends SubsystemBase {
     //90 degrees /360 = 2*PI*R 
     private static final double HEADING_BOT_DEG_TO_BOT_WHEEL_DISTANCE = (BOT_WHEEL_TO_WHEEL_DIAMETER * Math.PI)/360.0;
 
-    private static final WPI_TalonFX leftMotor = RobotMap.leftDriveMotor;
-    private static final WPI_TalonFX rightMotor = RobotMap.rightDriveMotor;
+    private static final WPI_TalonFX leftFrontMotor = RobotMap.leftFrontDriveMotor;
+    private static final WPI_TalonFX rightFrontMotor = RobotMap.rightFrontDriveMotor;
+    private static final WPI_TalonFX leftBackMotor = RobotMap.leftBackDriveMotor;
+    private static final WPI_TalonFX rightBackMotor = RobotMap.rightBackDriveMotor;
 
     private static XboxController driverController = Robot.m_robotContainer.driverController;
 
@@ -69,29 +71,48 @@ public class DriveSubsystem extends SubsystemBase {
         ZeroYaw();
         resetEncoders();
 
-        leftMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
-        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        leftMotor.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
-        leftMotor.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
-        leftMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
-        
-        rightMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
-        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        rightMotor.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
-        rightMotor.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
-        rightMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
+        leftFrontMotor.set(ControlMode.Follower, leftBackMotor.getDeviceID());
+        rightFrontMotor.set(ControlMode.Follower, rightBackMotor.getDeviceID());
 
-		leftMotor.setNeutralMode(NeutralMode.Coast);
-        rightMotor.setNeutralMode(NeutralMode.Coast);
+        leftFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
+        leftFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        leftFrontMotor.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        leftFrontMotor.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        leftFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
+
+        leftBackMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
+        leftBackMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        leftBackMotor.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        leftBackMotor.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        leftBackMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
         
-        leftMotor.setInverted(false); //--> enable if we determine they are not even
-        rightMotor.setInverted(true);
+        rightFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
+        rightFrontMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightFrontMotor.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        rightFrontMotor.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        rightFrontMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
+
+        rightBackMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1);
+        rightBackMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightBackMotor.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+        rightBackMotor.configVelocityMeasurementWindow(16);//1,2,4,8,16,32,64(default)
+        rightBackMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 5, 10);
+
+		leftFrontMotor.setNeutralMode(NeutralMode.Coast);
+        rightFrontMotor.setNeutralMode(NeutralMode.Coast);
+        leftBackMotor.setNeutralMode(NeutralMode.Coast);
+        rightBackMotor.setNeutralMode(NeutralMode.Coast);
+        
+        leftFrontMotor.setInverted(false); //--> enable if we determine they are not even
+        rightFrontMotor.setInverted(true);
+        leftBackMotor.setInverted(false); 
+        rightBackMotor.setInverted(true);
 
         // Rate Drive PID
         leftForwardPID.initialize2(
-            2, // Proportional Gain //2.925 ZN w FF 
-            20, // Integral Gain //42.12 ZN w FF
-            0.0, // Derivative Gain //0
+            0, // Proportional Gain //2.925 ZN w FF 
+            0, // Integral Gain //42.12 ZN w FF
+            0, // Derivative Gain //0
             0.0, // Cage Limit 0.3 //0
             0.0, // Deadband //0
             12,// MaxOutput Volts 0.25 //100 //12
@@ -101,8 +122,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Rate Drive PID
         rightForwardPID.initialize2(
-            2, // Proportional Gain //2.925 ZN w FF //2
-            20, // Integral Gain //42.12 ZN w FF //20
+            0, // Proportional Gain //2.925 ZN w FF //2
+            0, // Integral Gain //42.12 ZN w FF //20
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3
             0.0, // Deadband //0
@@ -113,8 +134,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Position Command PID for Autonomous and 
         positionPID.initialize2(
-            3, // Proportional Gain //1.35 //2
-            10, // Integral Gain //5 //10
+            0, // Proportional Gain //1.35 //2
+            0, // Integral Gain //5 //10
             0.0, // Derivative Gain //0
             0.0, // Cage Limit //0.3 //0.1 //0.2
             0.0, // Deadband //0
@@ -148,8 +169,8 @@ public class DriveSubsystem extends SubsystemBase {
         left_speed_cmd = leftSpeed;
         right_speed_cmd = rightSpeed;
         
-        final double leftFeedforward = calculateNew(leftSpeed, 0, 0.7, 3, 0); // ks=0.8, kv=0.5
-        final double rightFeedforward = calculateNew(rightSpeed, 0, 0.7, 3, 0);
+        //final double leftFeedforward = calculateNew(leftSpeed, 0, 0.75, 2.72, 0); // 0.3, 0.2
+        //final double rightFeedforward = calculateNew(rightSpeed, 0, 0, 0, 0);
 
         double batteryVoltage = RobotController.getBatteryVoltage(); // getting battery voltage from PDP via the rio
 
@@ -157,11 +178,11 @@ public class DriveSubsystem extends SubsystemBase {
             batteryVoltage = 1;
         }
 
-        double leftOutput = leftForwardPID.execute(leftSpeed, getLeftEncoderVelocityMetersPerSecond());
-        double rightOutput = rightForwardPID.execute(rightSpeed, getRightEncoderVelocityMetersPerSecond());
+        double leftOutput = leftForwardPID.execute(leftSpeed, getLeftBackEncoderVelocityMetersPerSecond());
+        double rightOutput = rightForwardPID.execute(rightSpeed, getRightBackEncoderVelocityMetersPerSecond());
         
-        double LVoltagePercentCommand = ((leftOutput + leftFeedforward) / batteryVoltage);
-        double RVoltagePercentCommand = ((rightOutput + rightFeedforward) / batteryVoltage);
+        double LVoltagePercentCommand = ((leftOutput) / batteryVoltage);
+        double RVoltagePercentCommand = ((rightOutput) / batteryVoltage);
 
         if (LVoltagePercentCommand > 1.0) {
             LVoltagePercentCommand = 1.0;
@@ -180,16 +201,15 @@ public class DriveSubsystem extends SubsystemBase {
         //SmartDashboard.putNumber("Right Motor Command", RVoltagePercentCommand);
         //SmartDashboard.putNumber("Left Motor Command", LVoltagePercentCommand);
         
-
-        leftMotor.set(LVoltagePercentCommand);
-        rightMotor.set(RVoltagePercentCommand);
+        leftBackMotor.set(LVoltagePercentCommand);
+        //rightBackMotor.set(RVoltagePercentCommand);
 
 
         // SmartDashboard.putNumber("leftSpeed", leftSpeed);
         // SmartDashboard.putNumber("rightSpeed", rightSpeed);
         
-        SmartDashboard.putNumber("Left Encoder V", getLeftEncoderVelocityMetersPerSecond());
-        SmartDashboard.putNumber("Right Encoder V", getRightEncoderVelocityMetersPerSecond());
+        SmartDashboard.putNumber("Left Encoder V", getLeftBackEncoderVelocityMetersPerSecond());
+        SmartDashboard.putNumber("Right Encoder V", getRightBackEncoderVelocityMetersPerSecond());
         
         //SmartDashboard.putNumber("Yaw Value", getYaw());
         //SmartDashboard.putNumber("Distance Travelled", distanceTravelledinMeters());
@@ -225,8 +245,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setModePercentVoltage() {
-        leftMotor.set(ControlMode.PercentOutput, 0);
-        rightMotor.set(ControlMode.PercentOutput, 0);
+        leftFrontMotor.set(ControlMode.PercentOutput, 0);
+        rightFrontMotor.set(ControlMode.PercentOutput, 0);
+        leftBackMotor.set(ControlMode.PercentOutput, 0);
+        rightBackMotor.set(ControlMode.PercentOutput, 0);
     }
     
     public double getYaw() {
@@ -261,36 +283,52 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double distanceTravelledinTicks() {
-		return (getLeftEncoderPosition() + getRightEncoderPosition()) / 2;
+		return (getLeftBackEncoderPosition() + getRightBackEncoderPosition()) / 2;
     }
     
-	public double getLeftEncoderPosition() {
-		return leftMotor.getSelectedSensorPosition();
+	public double getLeftFrontEncoderPosition() {
+		return leftFrontMotor.getSelectedSensorPosition();
 	}
 
-	public double getRightEncoderPosition() {
-		return rightMotor.getSelectedSensorPosition();
+	public double getRightFrontEncoderPosition() {
+		return rightFrontMotor.getSelectedSensorPosition();
+    }
+    
+    public double getLeftBackEncoderPosition() {
+		return leftBackMotor.getSelectedSensorPosition();
+	}
+
+	public double getRightBackEncoderPosition() {
+		return rightBackMotor.getSelectedSensorPosition();
 	}
 	
-	public double getLeftEncoderVelocity() {
-		return leftMotor.getSelectedSensorVelocity();
+	public double getLeftFrontEncoderVelocity() {
+		return leftFrontMotor.getSelectedSensorVelocity();
 	}
 
-	public double getRightEncoderVelocity() {
-        return rightMotor.getSelectedSensorVelocity();
-    }	
+	public double getRightFrontEncoderVelocity() {
+        return rightFrontMotor.getSelectedSensorVelocity();
+    }
     
-    public double getLeftEncoderVelocityMetersPerSecond() {
+    public double getLeftBackEncoderVelocity() {
+		return leftBackMotor.getSelectedSensorVelocity();
+	}
+
+	public double getRightBackEncoderVelocity() {
+        return rightBackMotor.getSelectedSensorVelocity();
+    }
+    
+    public double getLeftBackEncoderVelocityMetersPerSecond() {
         //getQuadVelocity is in 100 ms so we have to divide it by 10 to get seconds
-        double leftVelocityMPS = (leftMotor.getSelectedSensorVelocity()*10); // /10
+        double leftVelocityMPS = (leftBackMotor.getSelectedSensorVelocity()*10); // /10
         // since getQuadVelocity is in encoder ticks, we have to convert it to meters
         leftVelocityMPS = leftVelocityMPS * METERS_PER_TICKS;
         return (leftVelocityMPS);
     }
     
-    public double getRightEncoderVelocityMetersPerSecond() {
+    public double getRightBackEncoderVelocityMetersPerSecond() {
         //getQuadVelocity is in 100 ms so we have to divide it by 10 to get seconds
-        double rightVelocityMPS = (rightMotor.getSelectedSensorVelocity()*10); // /10
+        double rightVelocityMPS = (rightBackMotor.getSelectedSensorVelocity()*10); // /10
         // since getQuadVelocity is in encoder ticks, we have to convert it to meters
         //Need to have a negative for right velocity since the motors are reversed on the opposite side
         rightVelocityMPS = rightVelocityMPS * METERS_PER_TICKS;
@@ -298,17 +336,17 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getAverageEncoderVelocityMetersPerSecond() {
-        double velocityMPS = (getRightEncoderVelocityMetersPerSecond()+getLeftEncoderVelocityMetersPerSecond())*0.5;
+        double velocityMPS = (getRightBackEncoderVelocityMetersPerSecond()+getLeftBackEncoderVelocityMetersPerSecond())*0.5;
         return (velocityMPS);
     }
 
     public double leftDistanceTravelledInMeters() {
-        double left_dist = getLeftEncoderPosition() * METERS_PER_TICKS;
+        double left_dist = getLeftBackEncoderPosition() * METERS_PER_TICKS;
         return left_dist;
     }
 
     public double rightDistanceTravelledInMeters() {
-        double right_dist = getRightEncoderPosition() * METERS_PER_TICKS;
+        double right_dist = getRightBackEncoderPosition() * METERS_PER_TICKS;
         return right_dist;
     }
 
@@ -321,8 +359,10 @@ public class DriveSubsystem extends SubsystemBase {
 	}
 
 	public void resetEncoders() {
-		leftMotor.setSelectedSensorPosition(0);
-		rightMotor.setSelectedSensorPosition(0);
+		leftFrontMotor.setSelectedSensorPosition(0);
+        rightFrontMotor.setSelectedSensorPosition(0);
+        leftBackMotor.setSelectedSensorPosition(0);
+		rightBackMotor.setSelectedSensorPosition(0);
     }
     
     // Advanced Drivetrain utilizing PID
@@ -333,8 +373,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     // basic, no frills, no PID, no nothing drivetrain
     public static void drive(double throttle, double rotate) {
-        leftMotor.set(throttle + rotate);
-        rightMotor.set(throttle - rotate);
+        leftFrontMotor.set(throttle + rotate);
+        rightFrontMotor.set(throttle - rotate);
+        leftBackMotor.set(throttle + rotate);
+        rightBackMotor.set(throttle - rotate);
     }
     
     /*****************************************************************************

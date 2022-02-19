@@ -9,8 +9,12 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 
 public class RobotMap {
-    public static final int LEFT_DRIVE_PORT = 1;
-    public static final int RIGHT_DRIVE_PORT = 2;
+    public static final int LEFT_FRONT_DRIVE_PORT = 3;
+    public static final int RIGHT_FRONT_DRIVE_PORT = 4;
+    public static final int LEFT_BACK_DRIVE_PORT = 1;
+    public static final int RIGHT_BACK_DRIVE_PORT = 2;
+
+    
 
     public static final int INTAKE_PORT = 10;
     public static final int CLIMBER_PORT = 11;
@@ -24,8 +28,10 @@ public class RobotMap {
     
     /************************************************************************************************************/
 
-    public static WPI_TalonFX leftDriveMotor = new WPI_TalonFX(LEFT_DRIVE_PORT);
-    public static WPI_TalonFX rightDriveMotor = new WPI_TalonFX(RIGHT_DRIVE_PORT);
+    public static WPI_TalonFX leftFrontDriveMotor = new WPI_TalonFX(LEFT_FRONT_DRIVE_PORT);
+    public static WPI_TalonFX rightFrontDriveMotor = new WPI_TalonFX(RIGHT_FRONT_DRIVE_PORT);
+    public static WPI_TalonFX leftBackDriveMotor = new WPI_TalonFX(LEFT_BACK_DRIVE_PORT);
+    public static WPI_TalonFX rightBackDriveMotor = new WPI_TalonFX(RIGHT_BACK_DRIVE_PORT);
     
     public static WPI_TalonSRX intakeMotor = new WPI_TalonSRX(INTAKE_PORT);
     public static WPI_TalonSRX climberMotor = new WPI_TalonSRX(CLIMBER_PORT);

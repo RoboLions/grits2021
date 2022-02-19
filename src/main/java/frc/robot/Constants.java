@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj.util.Color;
 public final class Constants {
 
   public static final class OIConstants {
-    public static final int DRIVER_CONTROLLER_PORT = 0;
-    public static final int MANIPULATOR_CONTROLLER_PORT = 1;
+    public static final int DRIVER_CONTROLLER_PORT = 1;
+    public static final int MANIPULATOR_CONTROLLER_PORT = 0;
     public static final int TEST_CONTROLLER_PORT = 2;
     public static int LEFT_AXIS = 0;
     public static int RIGHT_AXIS = 1;
